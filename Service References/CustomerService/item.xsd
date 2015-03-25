@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://Nimaz" elementFormDefault="qualified" targetNamespace="http://Nimaz" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/AirlineService" />
+  <xs:complexType name="CustomerClass">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/AirlineService" base="q1:AbstractPerson">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Cid" type="xs:int" />
+          <xs:element minOccurs="0" name="custObject" nillable="true" type="tns:ArrayOfCustomerClass" />
+          <xs:element minOccurs="0" name="customerCount" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CustomerClass" nillable="true" type="tns:CustomerClass" />
+  <xs:complexType name="ArrayOfCustomerClass">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomerClass" nillable="true" type="tns:CustomerClass" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCustomerClass" nillable="true" type="tns:ArrayOfCustomerClass" />
+</xs:schema>

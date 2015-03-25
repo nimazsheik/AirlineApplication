@@ -30,8 +30,9 @@ namespace AirlineApplication
                dateTimePicker1.Value = DateTime.Today;
         }
 
- 
 
+        CustomerService.CustomerServiceClient client = new AirlineApplication.CustomerService.CustomerServiceClient();
+        CustomerService.CustomerClass customer = null;
 
 
         //ComboBox dropdown style = dropdown list
@@ -39,17 +40,24 @@ namespace AirlineApplication
         {//loading from customer class to combobox
             try
             {
-                customerObject = new CustomerClass();
-                customerObject.loadCustomers();
+                
+
+               // customerObject = new CustomerClass();
+              //  customerObject.loadCustomers();
+               // customer = new CustomerService.CustomerClass();
+              customer=  client.loadCustomers();
+                
+                
                 comboBox1.Items.Clear();
-                for (int i = 0; i < customerObject.customerCount; i++)
+                for (int i = 0; i < customer.customerCount; i++)
                 {
-                    customerID = customerObject.custObject[i].Cid;
-                    string customerFullName = customerObject.custObject[i].Fname + " " + customerObject.custObject[i].Lname; //display name
+                    customerID = customer.custObject[i].Cid;
+                    string customerFullName = customer.custObject[i].Fname + " " + customer.custObject[i].Lname; //display name
                     string cmbDisplay = customerID + " - " + customerFullName;
                     //comboBox1.Items.Add(customerFullName);
                     comboBox1.Items.Add(cmbDisplay);
                 }
+                
             }
             catch (Exception ex)
             {
@@ -65,13 +73,14 @@ namespace AirlineApplication
                 newCustomer = false; //assuming no new customers from combobox
 
                 //Use the same loaded object in loadCustomerstoCombo method
-
+               // CustomerService.CustomerClass customer = null;
+              //  here just using the above variables customer and client variables, not creating new ones
 
                 int i = comboBox1.SelectedIndex;
-                txtFname.Text = customerObject.custObject[i].Fname;
-                txtLname.Text = customerObject.custObject[i].Lname;
-                txtNic.Text = customerObject.custObject[i].Nic;
-                if (customerObject.custObject[i].Gender == 'M')
+                txtFname.Text = customer.custObject[i].Fname;
+                txtLname.Text = customer.custObject[i].Lname;
+                txtNic.Text = customer.custObject[i].Nic;
+                if (customer.custObject[i].Gender == 'M')
                 {
                     rbMale.PerformClick(); //click it(choose Male if its gender from database or else female
                 }
@@ -79,11 +88,11 @@ namespace AirlineApplication
                 {
                     rbFemale.PerformClick();
                 }
-                dateTimePicker1.Value = customerObject.custObject[i].Dob;
-                txtAdd1.Text = customerObject.custObject[i].Add1;
-                txtAdd2.Text = customerObject.custObject[i].Add2;
-                txtPhn.Text = customerObject.custObject[i].Phone;
-                txtEmail.Text = customerObject.custObject[i].Email;
+                dateTimePicker1.Value = customer.custObject[i].Dob;
+                txtAdd1.Text = customer.custObject[i].Add1;
+                txtAdd2.Text = customer.custObject[i].Add2;
+                txtPhn.Text = customer.custObject[i].Phone;
+                txtEmail.Text = customer.custObject[i].Email;
             }
             catch (NullReferenceException ex)
             {
@@ -213,12 +222,14 @@ namespace AirlineApplication
 
         private void button1_Click_1(object sender, EventArgs e)    //Book Seat
         {
+            CustomerService.CustomerServiceClient client = new AirlineApplication.CustomerService.CustomerServiceClient();
+            CustomerService.CustomerClass customer = null;
+
             try
             {
                
                 if (newCustomer == true)
                 {
-
                     //validation
                 var controls = new[] { txtFname.Text, txtLname.Text, txtNic.Text, txtAdd1.Text, txtAdd2.Text, txtEmail.Text, txtPhn.Text };
                 if (!controls.All(x => string.IsNullOrEmpty(x)))  //if its not null or empty enter the details to database
@@ -228,35 +239,37 @@ namespace AirlineApplication
                         if ((Regex.IsMatch(txtFname.Text, @"^[a-zA-Z]+$"))&& (Regex.IsMatch(txtLname.Text, @"^[a-zA-Z]+$")))
                         {
                             // addDetails(); assign all the varialbes from customer class to these controls
-                            customerObject = new CustomerClass();   //reuse as new object
-                            customerObject.Fname = txtFname.Text;
-                            customerObject.Lname = txtLname.Text;
-                            customerObject.Nic = txtNic.Text;
+                          //  customerObject = new CustomerClass();   //reuse as new object
+                            customer = new CustomerService.CustomerClass();
+                            customer.Fname = txtFname.Text;
+                            customer.Lname = txtLname.Text;
+                            customer.Nic = txtNic.Text;
                             //gender
                                 if (rbMale.Checked)
                                 {
-                                    customerObject.Gender = Convert.ToChar(rbMale.Tag); //male
+                                    customer.Gender = Convert.ToChar(rbMale.Tag); //male
                                 }
                                 else
                                 {
-                                    customerObject.Gender = Convert.ToChar(rbFemale.Tag); //female
+                                    customer.Gender = Convert.ToChar(rbFemale.Tag); //female
                                 }
-                            customerObject.Dob = dateTimePicker1.Value;
-                            customerObject.Add1 = txtAdd1.Text;
-                            customerObject.Add2 = txtAdd2.Text;
-                            customerObject.Phone = txtPhn.Text;
-                            customerObject.Email = txtEmail.Text;
+                                customer.Dob = dateTimePicker1.Value;
+                                customer.Add1 = txtAdd1.Text;
+                                customer.Add2 = txtAdd2.Text;
+                                customer.Phone = txtPhn.Text;
+                                customer.Email = txtEmail.Text;
 
-                            customerID = customerObject.addDetails();
+                             //   customerID = customer.addDetails();
                             this.Refresh();
 
-                            BookSeatPlan bookSeat = new BookSeatPlan();
-                            bookSeat.getCustomerNic(customerID, txtNic.Text, txtFname.Text, txtLname.Text);
+                           BookSeatPlan bookSeat = new BookSeatPlan();
+         //// check this             bookSeat.getCustomerNic(customerID, txtNic.Text, txtFname.Text, txtLname.Text);
+                            client.addDetails(customer);
                             newCustomer = false;
                             MessageBox.Show("Data added successfully! \r\nSelect from existing customer before booking", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             MessageBox.Show("Please wait while the booking form loads......", "Loading", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
-                            bookSeat.ShowDialog();
+                          bookSeat.ShowDialog();
                             this.Close();
 
 
@@ -283,8 +296,8 @@ namespace AirlineApplication
                 else//newCustomer=false
                 {//if its false it means from comboBox
                     int i = comboBox1.SelectedIndex;
-                    customerID = customerObject.custObject[i].Cid;
-
+     ////check this               customerID = customerObject.custObject[i].Cid;
+                  //  customerID = customer.custObject[i].Cid;
                     BookSeatPlan bookSeat = new BookSeatPlan();
                     bookSeat.getCustomerNic(customerID, txtNic.Text, txtFname.Text, txtLname.Text);
                     newCustomer = false;
@@ -294,10 +307,6 @@ namespace AirlineApplication
                     bookSeat.ShowDialog();
                     this.Close();
                 }
-
-
-
-
 
 
               

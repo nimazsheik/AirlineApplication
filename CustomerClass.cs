@@ -35,7 +35,7 @@ namespace AirlineApplication
         {
             
 
-            dbcon = new DatabaseConnector();
+       /*     dbcon = new DatabaseConnector();
 
             
             dbcon.OpenConnection();
@@ -61,7 +61,8 @@ namespace AirlineApplication
             
             
             dbcon.CloseConnection();
-            return num;
+            return num;*/
+            return 1;
             
         }
 

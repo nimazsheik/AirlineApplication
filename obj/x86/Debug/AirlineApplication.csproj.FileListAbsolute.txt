@@ -26,3 +26,4 @@ C:\Users\Nimaz\Documents\Visual Studio 2013\Projects\AirlineApplication\AirlineA
 C:\Users\Nimaz\Documents\Visual Studio 2013\Projects\AirlineApplication\AirlineApplication\obj\x86\Debug\AirlineApplication.exe
 C:\Users\Nimaz\Documents\Visual Studio 2013\Projects\AirlineApplication\AirlineApplication\obj\x86\Debug\AirlineApplication.pdb
 C:\Users\Nimaz\Documents\Visual Studio 2013\Projects\AirlineApplication\AirlineApplication\obj\x86\Debug\AirlineApplication.csprojResolveAssemblyReference.cache
+C:\Users\Nimaz\Documents\Visual Studio 2013\Projects\AirlineApplication\AirlineApplication\bin\Debug\AirlineApplication.exe.config

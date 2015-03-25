@@ -108,9 +108,5 @@ namespace AirlineApplication
             return dataTable;
         }
 
-        
-
-
-
     }
 }
